@@ -156,33 +156,40 @@ int16_t ExtractSpeed(void)
     {
         Serial_RxFlag = 0;
         
-        
+      
         
         // 直接解析符号和数字
-        int8_t sign = 1;   //正数和负数
-        uint8_t start_index = 0;  //正数与负数有不同的数字检索
+        int8_t sign = 1;
+        uint8_t start_index = 0;
         
-        if (Serial_RxPacket[7] == '-')
+        if (Serial_RxPacket[7] == '+')
+        {
+            sign = 1;
+            start_index = 1;
+           
+        }
+        else if (Serial_RxPacket[7] == '-')
         {
             sign = -1;
             start_index = 1;
-            
+          
         }
         
+        // 解析数字部分
         uint16_t speed = 0;
-        for (uint8_t i = start_index; Serial_RxPacket[i+7] != '\0'; i++)
+        for (uint8_t i = start_index; Serial_RxPacket[i] != '\0'; i++)
         {
-            
-            speed = speed * 10 + (Serial_RxPacket[i] - '0');
-            
+            if (Serial_RxPacket[i] >= '0' && Serial_RxPacket[i] <= '9')
+            {
+                speed = speed * 10 + (Serial_RxPacket[i] - '0');
+            }
         }
         
         last = sign * speed;
-        
+      
     }
     return last;
 }
-
 
 void TIM2_IRQHandler(void)
 {
