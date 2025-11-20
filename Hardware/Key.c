@@ -22,10 +22,10 @@ uint8_t Key_GetNum(void)
 	if (GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_0) == 0)
 	{
 		Time_Key++;
-		if (Time_Key>=2)
+		if (Time_Key>=2) //防止震动间隔20ms后判断是否还在按下状态
 		{
 		Time_Key=0;
-		while (GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_0) == 0);
+		while (GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_0) == 0);  //等待松手
 		KeyNum = !KeyNum;
 		}
 	}

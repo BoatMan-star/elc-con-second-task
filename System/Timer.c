@@ -9,8 +9,10 @@ void Time_Init(void)
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure;
 	TIM_TimeBaseInitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
 	TIM_TimeBaseInitStructure.TIM_CounterMode = TIM_CounterMode_Up;
+	//计时中断时长1ms
 	TIM_TimeBaseInitStructure.TIM_Period = 100 - 1;
 	TIM_TimeBaseInitStructure.TIM_Prescaler = 720 - 1;
+	
 	TIM_TimeBaseInitStructure.TIM_RepetitionCounter = 0;
 	TIM_TimeBaseInit(TIM2, &TIM_TimeBaseInitStructure);
 	
