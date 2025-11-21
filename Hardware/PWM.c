@@ -9,7 +9,7 @@ void PWM_Init(void)
 	//a2和a3引脚配置
 	GPIO_InitTypeDef GPIO_InitStructure;
 	GPIO_InitStructure.GPIO_Mode=GPIO_Mode_AF_PP;
-	GPIO_InitStructure.GPIO_Pin=GPIO_Pin_2|GPIO_Pin_3;
+	GPIO_InitStructure.GPIO_Pin=GPIO_Pin_1|GPIO_Pin_3;
 	GPIO_InitStructure.GPIO_Speed=GPIO_Speed_50MHz;
 	GPIO_Init(GPIOA,&GPIO_InitStructure);
 	

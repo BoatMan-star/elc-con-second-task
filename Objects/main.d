@@ -38,3 +38,6 @@
 .\objects\main.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdlib.h
 .\objects\main.o: .\System\Timer.h
 .\objects\main.o: .\Hardware\OLED.h
+.\objects\main.o: .\Hardware\PID.h
+.\objects\main.o: .\Hardware\Sensor.h
+.\objects\main.o: .\Hardware\Image.h

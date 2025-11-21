@@ -9,6 +9,15 @@
 #include <stdlib.h>
 #include "Timer.h"
 #include "OLED.h"
+#include "PID.h"
+#include "Sensor.h"
+#include "Image.h"
+
+#define Stringht     1
+#define LightLeft    2
+#define LightRight   3
+#define StrLeft      4
+#define StrRight     5
 
 uint8_t Key_Num;   //小车启动按键
 
@@ -38,54 +47,15 @@ int main(void)
   Encoder_Init();
 	Serial_Init();
 	OLED_Init();
+	Sensor_Init();
 	
 	while (1)
 	{
+		Image_Control();    //实现菜单调速功能
 	}
 		
 }
 
-int16_t ExtractSpeed(void)
-{
-    static int16_t last = 0;
-    if (Serial_RxFlag == 1)
-    {
-        Serial_RxFlag = 0;
-        
-      
-        
-        // 直接解析符号和数字
-        int8_t sign = 1;
-        uint8_t start_index = 0;
-        
-        if (Serial_RxPacket[7] == '+')
-        {
-            sign = 1;
-            start_index = 1;
-           
-        }
-        else if (Serial_RxPacket[7] == '-')
-        {
-            sign = -1;
-            start_index = 1;
-          
-        }
-        
-        // 解析数字部分
-        uint16_t speed = 0;
-        for (uint8_t i = start_index; Serial_RxPacket[i] != '\0'; i++)
-        {
-            if (Serial_RxPacket[i] >= '0' && Serial_RxPacket[i] <= '9')
-            {
-                speed = speed * 10 + (Serial_RxPacket[i] - '0');
-            }
-        }
-        
-        last = sign * speed;
-      
-    }
-    return last;
-}
 
 void TIM2_IRQHandler(void)
 {
@@ -96,15 +66,47 @@ void TIM2_IRQHandler(void)
 		
 		if (cnt>=10)
 		{
-		cnt=0;
+		
+			cnt=0;
+			//每10ms读取一次电机旋转速度实际值
+		
+			Speed1=Encoder_GetSpeed1();
+		
+			Speed2=Encoder_GetSpeed2();
+		
+		
+			Key_Num=Key_GetNum();   //监视按键状态
+		
+		
+			Route_Flag=Route_Judge();
 			
-		PIDControl++;
 		
-		//每10ms读取一次电机旋转速度实际值
-		Speed1=Encoder_GetSpeed1();
-		Speed2=Encoder_GetSpeed2();
+			Speed_Target=Key_Speed();
+			
 		
-		Key_Num=Key_GetNum();   //监视按键状态
+		if (Key_Num==0) //按下按键小车启动
+    {
+		if (Route_Flag==Stringht)
+		{
+			if (PIDControl>=1) PID_Straight();
+		}
+		else if (Route_Flag==LightLeft)
+		{
+			if (PIDControl>=1) PID_LeftSlight();
+		}
+		else if (Route_Flag==LightRight)
+		{
+			if (PIDControl>=1) PID_RightSlight();
+		}
+		else if (Route_Flag==StrLeft)
+		{
+			if (PIDControl>=1) PID_LeftStraight();
+		}
+		else if (Route_Flag==StrRight)
+		{
+			if (PIDControl>=1) PID_RightStraight();
+		}
+	  }
 	
 		}
 		TIM_ClearITPendingBit(TIM2, TIM_IT_Update);

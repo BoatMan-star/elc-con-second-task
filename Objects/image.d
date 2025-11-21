@@ -28,3 +28,8 @@
 .\objects\image.o: .\Library\stm32f10x_usart.h
 .\objects\image.o: .\Library\stm32f10x_wwdg.h
 .\objects\image.o: .\Library\misc.h
+.\objects\image.o: Hardware\Serial.h
+.\objects\image.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\image.o: D:\keil5\ARM\ARMCC\Bin\..\include\string.h
+.\objects\image.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdlib.h
+.\objects\image.o: Hardware\OLED.h

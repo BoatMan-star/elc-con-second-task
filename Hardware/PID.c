@@ -11,8 +11,7 @@ extern int16_t Speed2;
 //红外传感器判断小车应走直线
 void PID_Straight(void)
 {
-	
-	//给定电机1一个速度。通过PID算法实现电机2稳定在此速度
+	//给定电机1一个速度。通过PID算法实现电机1稳定在此速度
 	static int16_t Location1_Target;
 	
 	//pid控制定义参数变量kp，ki，kd（增量式pid控制速度）
